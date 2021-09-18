@@ -8,19 +8,24 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\Murphy\\.nuget\\packages\\": {}
+    "C:\\Users\\Murphy\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Murphy\\Documents\\C-Labs\\Lab2\\Lab2\\Lab2.csproj",
+      "projectUniqueName": "C:\\Users\\Murphy\\Documents\\C# labs\\Lab2\\Lab2\\Lab2.csproj",
       "projectName": "Lab2",
-      "projectPath": "C:\\Users\\Murphy\\Documents\\C-Labs\\Lab2\\Lab2\\Lab2.csproj",
+      "projectPath": "C:\\Users\\Murphy\\Documents\\C# labs\\Lab2\\Lab2\\Lab2.csproj",
       "packagesPath": "C:\\Users\\Murphy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Murphy\\Documents\\C-Labs\\Lab2\\Lab2\\obj\\",
+      "outputPath": "C:\\Users\\Murphy\\Documents\\C# labs\\Lab2\\Lab2\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
         "C:\\Users\\Murphy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

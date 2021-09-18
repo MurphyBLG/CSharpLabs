@@ -14,20 +14,11 @@ namespace Lab1
     class Library
     {
         private List<Book> books = new List<Book>();
-        public void addBook()
+        public void AddBook(Book newBook)
         {
-            Console.Clear();
-            Console.WriteLine("Enter name, autor and date of writing of book:");
-
-            Book newBook = new Book
-            {
-                Name = Console.ReadLine(),
-                Autor = Console.ReadLine(),
-                DateOfWriting = Int32.Parse(Console.ReadLine())
-            };
             books.Add(newBook);
         }
-        public void printFullLibrary()
+        public void PrintFullLibrary()
         {
             Console.Clear();
             foreach (var item in books)
@@ -37,7 +28,7 @@ namespace Lab1
             Console.WriteLine("Press any key to go back");
             Console.ReadKey();
         }
-        private void printResult(List<Book> ans)
+        private void PrintResult(List<Book> ans)
         {
             foreach (var item in ans)
             {
@@ -46,23 +37,20 @@ namespace Lab1
             Console.WriteLine("Press any key to go back");
             Console.ReadKey();
         }
-        public void findBooks()
+        public void FindBooks(int variant)
         {
-            Console.Clear();
-            Console.Write("1. By name\n2. By date of writing\n3. By autor\n");
-            int variant = Int32.Parse(Console.ReadLine());
             Console.Clear();
 
             switch (variant)
             {
                 case 1:
-                    findBooksByName();
+                    FindBooksByName();
                     break;
                 case 2:
-                    findBooksByDate();
+                    FindBooksByDate();
                     break;
                 case 3:
-                    findBooksByAutor();
+                    FindBooksByAutor();
                     break;
                 default:
                     Console.WriteLine("There is no such a parametr");
@@ -71,7 +59,7 @@ namespace Lab1
                     return;
             }
         }
-        private void findBooksByName()
+        private void FindBooksByName()
         {
             Console.Write("Enter name of the book: ");
             List<Book> ans = new List<Book>();
@@ -79,7 +67,7 @@ namespace Lab1
             Console.Clear();
 
             ans = books.FindAll(book => book.Name == param);
-            if (ans.Count != 0) printResult(ans);
+            if (ans.Count != 0) PrintResult(ans);
             else
             {
                 Console.WriteLine("No books found");
@@ -87,7 +75,7 @@ namespace Lab1
                 Console.ReadKey();
             }
         }
-        private void findBooksByDate()
+        private void FindBooksByDate()
         {
             Console.Write("Enter date of writing: ");
             List<Book> ans = new List<Book>();
@@ -95,7 +83,7 @@ namespace Lab1
             Console.Clear();
 
             ans = books.FindAll(book => book.DateOfWriting == Int32.Parse(param));
-            if (ans.Count != 0) printResult(ans);
+            if (ans.Count != 0) PrintResult(ans);
             else
             {
                 Console.WriteLine("No books found");
@@ -103,7 +91,7 @@ namespace Lab1
                 Console.ReadKey();
             }
         }
-        private void findBooksByAutor()
+        private void FindBooksByAutor()
         {
             Console.Write("Enter autor of the book: ");
             List<Book> ans = new List<Book>();
@@ -111,7 +99,7 @@ namespace Lab1
             Console.Clear();
 
             ans = books.FindAll(book => book.Autor == param);
-            if (ans.Count != 0) printResult(ans);
+            if (ans.Count != 0) PrintResult(ans);
             else
             {
                 Console.WriteLine("No books found");
@@ -119,7 +107,7 @@ namespace Lab1
                 Console.ReadKey();
             }
         }
-        public void sortBooks()
+        public void SortBooks()
         {
             Console.Clear();
             Console.Write("1. By name\n2. By date of writing\n3. By autor\n");
@@ -130,15 +118,15 @@ namespace Lab1
             {
                 case 1:
                     books.Sort((x, y) => x.Name.CompareTo(y.Name));
-                    printFullLibrary();
+                    PrintFullLibrary();
                     break;
                 case 2:
                     books.Sort((x, y) => x.DateOfWriting.CompareTo(y.DateOfWriting));
-                    printFullLibrary();
+                    PrintFullLibrary();
                     break;
                 case 3:
                     books.Sort((x, y) => x.Autor.CompareTo(y.Autor));
-                    printFullLibrary();
+                    PrintFullLibrary();
                     break;
                 default:
                     Console.WriteLine("There is no such a parametr!");
@@ -147,13 +135,8 @@ namespace Lab1
                     return;
             }
         }
-        public void deleteBook()
+        public void DeleteBook(string nameOfBook, string autorOfBook, int dateOfWriting)
         {
-            Console.Clear();
-            Console.WriteLine("Enter name, autor and date of writing of book:");
-            string nameOfBook = Console.ReadLine(), autorOfBook = Console.ReadLine();
-            int dateOfWriting = Int32.Parse(Console.ReadLine());
-
             bool smthDeleted = Convert.ToBoolean(books.RemoveAll(x => (x.Name == nameOfBook && x.Autor == autorOfBook && x.DateOfWriting == dateOfWriting)));
             if (smthDeleted)
             {
@@ -178,25 +161,41 @@ namespace Lab1
             while (true)
             {
                 Console.Clear();
-                Console.Write("What do you want to do?\n1. Add book\n2. Delete book\n3. Print library\n4. Find books\n5. Sort books\n6. Exit");
+                Console.Write("What do you want to do?\n1. Add book\n2. Delete book\n3. Print library\n4. Find books\n5. Sort books\n6. Exit\n");
                 int action = Int32.Parse(Console.ReadLine());
 
                 switch (action)
                 {
                     case 1:
-                        myLib.addBook();
+                        Console.Clear();
+                        Console.WriteLine("Enter name, autor and date of writing of book:");
+
+                        Book newBook = new Book
+                        {
+                            Name = Console.ReadLine(),
+                            Autor = Console.ReadLine(),
+                            DateOfWriting = Int32.Parse(Console.ReadLine())
+                        };
+                        myLib.AddBook(newBook);
                         break;
                     case 2:
-                        myLib.deleteBook();
+                        Console.Clear();
+                        Console.WriteLine("Enter name, autor and date of writing of book:");
+                        string nameOfBook = Console.ReadLine(), autorOfBook = Console.ReadLine();
+                        int dateOfWriting = Int32.Parse(Console.ReadLine());
+                        myLib.DeleteBook(nameOfBook, autorOfBook, dateOfWriting);
                         break;
                     case 3:
-                        myLib.printFullLibrary();
+                        myLib.PrintFullLibrary();
                         break;
                     case 4:
-                        myLib.findBooks();
+                        Console.Clear();
+                        Console.Write("1. By name\n2. By date of writing\n3. By autor\n");
+                        int variant = Int32.Parse(Console.ReadLine());
+                        myLib.FindBooks(variant);
                         break;
                     case 5:
-                        myLib.sortBooks();
+                        myLib.SortBooks();
                         break;
                     case 6:
                         return;
