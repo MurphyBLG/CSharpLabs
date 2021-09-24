@@ -8,7 +8,7 @@ namespace Lab2
     {
         private List<char> symbols = new List<char>();
 
-        public List<char> Symbols { get => symbols; set => symbols = value; }
+        public List<char> Symbols { get => new List<char>(symbols); set => symbols = value; }
 
         public String(List<char> vs)
         {
@@ -23,8 +23,9 @@ namespace Lab2
 
         public static String operator +(String a, char c)
         {
-            a.Symbols.Add(c);
-            return new String(a.Symbols);
+            var temp = a.Symbols;
+            temp.Add(c);
+            return new String(temp);
         }
 
         public static bool operator <(String a, String b)
@@ -53,26 +54,7 @@ namespace Lab2
 
         public static bool operator >(String a, String b)
         {
-            if (a.Symbols.Count >= b.Symbols.Count)
-            {
-                for (int i = 0; i < b.Symbols.Count; i++)
-                {
-                    if (a[i] == b[i]) continue;
-                    if (a[i] > b[i]) return true;
-                    else break;
-                }
-                return true;
-            }
-            else
-            {
-                for (int i = 0; i < a.Symbols.Count; i++)
-                {
-                    if (a[i] == b[i]) continue;
-                    if (a[i] > b[i]) return true;
-                    else break;
-                }
-                return false;
-            }
+            return b < a;
         }
 
         public static bool operator ==(String a, String b)
@@ -90,30 +72,7 @@ namespace Lab2
 
         public static bool operator !=(String a, String b)
         {
-            if (a.Symbols.Count > b.Symbols.Count)
-            {
-                for (int i = 0; i < b.Symbols.Count; i++)
-                {
-                    if (a[i] == b[i]) continue;
-                    if (a[i] != b[i]) return true;
-                }
-                return true;
-            }
-
-            if (a.Symbols.Count < b.Symbols.Count)
-            {
-                for (int i = 0; i < a.Symbols.Count; i++)
-                {
-                    if (a[i] == b[i]) continue;
-                    if (a[i] != b[i]) return true;
-                }
-                return true;
-            }
-
-            for (int i = 0; i < b.Symbols.Count; i++)
-                if (a[i] != b[i]) return true;
-           
-            return false;
+            return !(a == b);
         }
     }
     class Program
@@ -126,6 +85,8 @@ namespace Lab2
             Console.WriteLine(a > b);
             Console.WriteLine(a == b);
             Console.WriteLine(a != b);
+            a += 'e';
+            Console.WriteLine(a.Symbols.ToArray());
         }
     }
 }
