@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<buildings>
+	<ResidentialBuilding>
+		<CountOfRooms>3</CountOfRooms>
+		<CountOfApartments>8</CountOfApartments>
+	</ResidentialBuilding>
+
+	<ResidentialBuilding>
+		<CountOfRooms>9</CountOfRooms>
+		<CountOfApartments>14</CountOfApartments>
+	</ResidentialBuilding>
+
+	<ResidentialBuilding>
+		<CountOfRooms>13</CountOfRooms>
+		<CountOfApartments>5</CountOfApartments>
+	</ResidentialBuilding>
+
+	<ResidentialBuilding>
+		<CountOfRooms>2</CountOfRooms>
+		<CountOfApartments>16 </CountOfApartments>
+	</ResidentialBuilding>
+
+	<ResidentialBuilding>
+		<CountOfRooms>16</CountOfRooms>
+		<CountOfApartments>15</CountOfApartments>
+	</ResidentialBuilding>
+
+	<NonResidentialBuilding>
+		<Square>97,2</Square>
+	</NonResidentialBuilding>
+
+	<NonResidentialBuilding>
+		<Square>29,6</Square>
+	</NonResidentialBuilding>
+
+	<NonResidentialBuilding>
+		<Square>4,0</Square>
+	</NonResidentialBuilding>
+
+	<NonResidentialBuilding>
+		<Square>26,82</Square>
+	</NonResidentialBuilding>
+
+	<NonResidentialBuilding>
+		<Square>12,86</Square>
+	</NonResidentialBuilding>
+</buildings>

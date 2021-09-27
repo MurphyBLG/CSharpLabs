@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Xml;
 using System.Collections.Generic;
 
 namespace Lab3
@@ -6,10 +8,20 @@ namespace Lab3
     class ManagementCompany
     {
         private List<Building> buildings = new List<Building>();
-        
+        private double _AVGNumOfPeople = 0;
+
+        public double AVGNumOfPeople
+        {
+            get
+            {
+                return _AVGNumOfPeople / buildings.Count;
+            }
+        }
+
         public void AddBuilding (Building a)
         {
             buildings.Add(a);
+            _AVGNumOfPeople += a.GetAverageNumberOfPeolple();
         }
 
         public void SortBuildingsByAverageNumberOfPeolple()
@@ -19,7 +31,6 @@ namespace Lab3
 
         public void PrintBuildings()
         {
-            //int idx = 1;
             foreach(Building b in buildings)
             {
                 if (b is ResidentialBuilding)
@@ -107,13 +118,25 @@ namespace Lab3
     {
         static void Main(string[] args)
         {
+            XmlDocument doc = new XmlDocument();
+            doc.Load("C:\\Users\\Murphy\\Documents\\C-Labs\\Lab3\\Lab3\\Input data.xml");
+            XmlNodeList residentialBuildings = doc.GetElementsByTagName("ResidentialBuilding");
+            XmlNodeList nonResidentialBuildings = doc.GetElementsByTagName("NonResidentialBuilding");
+
             ManagementCompany myCompany = new ManagementCompany();
-            myCompany.AddBuilding(new ResidentialBuilding(1, 3));
-            myCompany.AddBuilding(new ResidentialBuilding(5, 7));
-            myCompany.AddBuilding(new ResidentialBuilding(11, 13));
-            myCompany.AddBuilding(new NonResidentialBuilding(11.25));
-            myCompany.AddBuilding(new NonResidentialBuilding(78.5));
-            myCompany.AddBuilding(new NonResidentialBuilding(786.6));
+
+            for (int i = 0; i < residentialBuildings.Count; i++)
+            {
+                var tmp = residentialBuildings[i].FirstChild;
+                myCompany.AddBuilding(new ResidentialBuilding(int.Parse(tmp.InnerText), int.Parse(tmp.NextSibling.InnerText)));
+            }
+
+            for (int i = 0; i < nonResidentialBuildings.Count; i++)
+            {
+                var tmp = nonResidentialBuildings[i].FirstChild;
+                myCompany.AddBuilding(new NonResidentialBuilding(double.Parse(tmp.InnerText)));
+            }
+
 
             myCompany.PrintBuildings();
             myCompany.SortBuildingsByAverageNumberOfPeolple();
