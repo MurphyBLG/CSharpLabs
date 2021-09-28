@@ -29,26 +29,58 @@ namespace Lab3
             buildings.Sort((f, s) => f.GetAverageNumberOfPeolple().CompareTo(s.GetAverageNumberOfPeolple()));
         }
 
+        private void CreateXmlElem(Building b, XmlDocument res)
+        {
+            if (b is ResidentialBuilding)
+            {
+                XmlElement xRoot = res.DocumentElement;
+                XmlElement newElement = res.CreateElement("ResidentialBuilding");
+                XmlElement countOfRoomsElem = res.CreateElement("CountOfRooms");
+                XmlElement countOfApartmentsElem = res.CreateElement("CountOfApartments");
+
+                XmlText countOfRoomsText = res.CreateTextNode(((ResidentialBuilding)b).CountOfRooms.ToString());
+                XmlText countOfApartmentsText = res.CreateTextNode(((ResidentialBuilding)b).CountOfApartments.ToString());
+
+                countOfRoomsElem.AppendChild(countOfRoomsText);
+                countOfApartmentsElem.AppendChild(countOfApartmentsText);
+
+                newElement.AppendChild(countOfRoomsElem);
+                newElement.AppendChild(countOfApartmentsElem);
+
+                xRoot.AppendChild(newElement);
+                res.Save("C:\\Users\\Murphy\\Documents\\C-Labs\\Lab3\\Lab3\\Output.xml");
+            }
+            else
+            {
+                XmlElement xRoot = res.DocumentElement;
+                XmlElement newElement = res.CreateElement("NonResidentialBuilding");
+                XmlElement squareElem = res.CreateElement("Square");
+
+                XmlText squareText = res.CreateTextNode(((NonResidentialBuilding)b).Square.ToString());
+
+                squareElem.AppendChild(squareText);
+
+                newElement.AppendChild(squareElem);
+
+                xRoot.AppendChild(newElement);
+                res.Save("C:\\Users\\Murphy\\Documents\\C-Labs\\Lab3\\Lab3\\Output.xml");
+            }
+        }
+
         public void PrintBuildings()
         {
-            foreach(Building b in buildings)
+            XmlDocument res = new XmlDocument();
+            res.Load("C:\\Users\\Murphy\\Documents\\C-Labs\\Lab3\\Lab3\\Output.xml");
+            foreach (Building b in buildings)
             {
-                if (b is ResidentialBuilding)
-                {       
-                    Console.WriteLine("Count of rooms: {0}", ((ResidentialBuilding)b).CountOfRooms);
-                    Console.WriteLine("Count of apatments: {0}", ((ResidentialBuilding)b).CountOfApartments);
-                    Console.WriteLine("Average number of people: {0}\n", b.GetAverageNumberOfPeolple());
-                }
-                else
-                {                    
-                    Console.WriteLine("Square: {0}", ((NonResidentialBuilding)b).Square);
-                    Console.WriteLine("Average number of people: {0}\n", b.GetAverageNumberOfPeolple());
-                }
+                CreateXmlElem(b, res);
             }
         }
 
         public void PrintBuildings(int firstPos, int lastPos)
         {
+            XmlDocument res = new XmlDocument();
+            res.Load("C:\\Users\\Murphy\\Documents\\C-Labs\\Lab3\\Lab3\\Output.xml");
             for (int i = firstPos; i < lastPos; i++)
             {
                 Building exmp;
@@ -56,23 +88,13 @@ namespace Lab3
                 {
                     exmp = buildings[i];
                 }
-                catch(ArgumentOutOfRangeException)
+                catch (ArgumentOutOfRangeException)
                 {
                     Console.WriteLine("ArgumentOutOfRangeException");
                     return;
                 }
 
-                if (exmp is ResidentialBuilding)
-                {
-                    Console.WriteLine("Count of rooms: {0}", ((ResidentialBuilding)exmp).CountOfRooms);
-                    Console.WriteLine("Count of apatments: {0}", ((ResidentialBuilding)exmp).CountOfApartments);
-                    Console.WriteLine("Average number of people: {0}\n", exmp.GetAverageNumberOfPeolple());
-                }
-                else
-                {
-                    Console.WriteLine("Square: {0}", ((NonResidentialBuilding)exmp).Square);
-                    Console.WriteLine("Average number of people: {0}\n", exmp.GetAverageNumberOfPeolple());
-                }
+                CreateXmlElem(buildings[i], res);
             }
         }
     }
@@ -140,6 +162,7 @@ namespace Lab3
 
             myCompany.PrintBuildings();
             myCompany.SortBuildingsByAverageNumberOfPeolple();
+            myCompany.PrintBuildings();
             myCompany.PrintBuildings(1, 30);
         }
     }
