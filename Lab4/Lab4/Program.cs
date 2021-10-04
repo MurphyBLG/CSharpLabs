@@ -10,16 +10,15 @@ namespace Lab4
 {
     class HTMLAnalizer
     {
-        private WebClient client = new WebClient();
-        private string HRefPattern = @"href\s*=\s*(?:[""'](?<1>[^""']*)[""']|(?<1>\S+))";
+        private readonly WebClient client = new WebClient();
+        private readonly string HRefPattern = @"href\s*=\s*(?:[""'](?<1>[^""']*)[""']|(?<1>\S+))";
         private Dictionary<string, bool> used = new Dictionary<string, bool>();
+        private HashSet<string> _ignoreFiles = new HashSet<string> { ".ico", ".xml", ".png", ".css", ".jpg", ".zip", ".ppt", ".docx", ".doc" };
         public void FindThirdPartyResourceURI(string URI)
         {
-            if (used.ContainsKey(URI))
-            {
-                if (!used[URI]) used[URI] = true;
-                else return;
-            }
+            if (!used.ContainsKey(URI)) used.Add(URI, false);
+            if (used[URI]) return;
+            else used[URI] = true;
 
             string mainPage;
             try
@@ -40,18 +39,30 @@ namespace Lab4
                              Islocal = !unLoc
                          }
                          ).ToList();
+                        
+            var externalRefs = (from href in hrefs
+                                where !href.Islocal
+                                select href.Ref).ToList();
 
-            foreach (var href in hrefs)
+            if (externalRefs.Count > 0) TargetFound?.Invoke(externalRefs);
+
+            var localRefs = (from href in hrefs
+                             where href.Islocal
+                             select href.Ref).ToList();
+
+            foreach(var link in localRefs)
             {
-                if (!used.ContainsKey(href.Ref) || !used[href.Ref]) Console.WriteLine(href.Ref);
-                if (href.Islocal)
+                string fileEx = Path.GetExtension((new Uri(link)).LocalPath).ToLower();
+                if ((!used.ContainsKey(link) || !used[link]) && !_ignoreFiles.Contains(fileEx))
                 {
-                    if (!used.ContainsKey(href.Ref)) used.Add(href.Ref, false);
-                    if (!used[href.Ref]) FindThirdPartyResourceURI(href.Ref);
+                    //Console.WriteLine(link);
+                    FindThirdPartyResourceURI(link);
                 }
-                used[href.Ref] = true;
             }
         }
+
+        private delegate void TargetFinder(List<string> targets);
+        private event TargetFinder TargetFound;
     }
 
     class Program
