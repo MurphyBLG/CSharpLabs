@@ -12,20 +12,25 @@ namespace Lab4
     {
         private readonly WebClient client = new WebClient();
         private readonly string HRefPattern = @"href\s*=\s*(?:[""'](?<1>[^""']*)[""']|(?<1>\S+))";
-        private Dictionary<string, bool> used = new Dictionary<string, bool>();
-        private HashSet<string> _ignoreFiles = new HashSet<string> { ".ico", ".xml", ".png", ".css", ".jpg", ".zip", ".ppt", ".docx", ".doc" };
+        private Dictionary<string, bool> usedExternal = new Dictionary<string, bool>();
+        private Dictionary<string, bool> usedLocal = new Dictionary<string, bool>();
+        private HashSet<string> _ignoreFiles = new HashSet<string> { ".ico", ".xml", ".png", ".css", ".jpg", ".zip", ".ppt", ".docx", ".doc", ".pdf" };
+
+        public delegate void TargetFoundEventHandler(List<string> links);
+        public event TargetFoundEventHandler TargetFound;
+
         public void FindThirdPartyResourceURI(string URI)
         {
-            if (!used.ContainsKey(URI)) used.Add(URI, false);
-            if (used[URI]) return;
-            else used[URI] = true;
+            if (!usedLocal.ContainsKey(URI)) usedLocal.Add(URI, false);
+            if (usedLocal[URI]) return;
+            else usedLocal[URI] = true;
 
             string mainPage;
             try
             {
                 mainPage = client.DownloadString(URI);
             }
-            catch 
+            catch
             {
                 return;
             }
@@ -39,21 +44,21 @@ namespace Lab4
                              Islocal = !unLoc
                          }
                          ).ToList();
-                        
+
             var externalRefs = (from href in hrefs
                                 where !href.Islocal
                                 select href.Ref).ToList();
 
-            if (externalRefs.Count > 0) TargetFound?.Invoke(externalRefs);
+            if (externalRefs.Count > 0) OnTargetFound(externalRefs);
 
             var localRefs = (from href in hrefs
                              where href.Islocal
                              select href.Ref).ToList();
 
-            foreach(var link in localRefs)
+            foreach (var link in localRefs)
             {
                 string fileEx = Path.GetExtension((new Uri(link)).LocalPath).ToLower();
-                if ((!used.ContainsKey(link) || !used[link]) && !_ignoreFiles.Contains(fileEx))
+                if ((!usedLocal.ContainsKey(link) || !usedLocal[link]) && !_ignoreFiles.Contains(fileEx))
                 {
                     //Console.WriteLine(link);
                     FindThirdPartyResourceURI(link);
@@ -61,8 +66,27 @@ namespace Lab4
             }
         }
 
-        private delegate void TargetFinder(List<string> targets);
-        private event TargetFinder TargetFound;
+        protected virtual void OnTargetFound(List<string> links)
+        {
+            if (TargetFound != null)
+                TargetFound(links);
+        }
+
+        public void PrintExternalLinks(List<string> links)
+        {
+            foreach (var link in links)
+            {
+                string fileEx = Path.GetExtension((new Uri(link)).LocalPath).ToLower();
+                if (!usedExternal.ContainsKey(link))
+                    usedExternal.Add(link, false);
+
+                if (!usedExternal[link] && !_ignoreFiles.Contains(fileEx))
+                {
+                    Console.WriteLine(link);
+                    usedExternal[link] = true;
+                }
+            }
+        }
     }
 
     class Program
@@ -71,6 +95,7 @@ namespace Lab4
         {
             HTMLAnalizer fi = new HTMLAnalizer();
 
+            fi.TargetFound += fi.PrintExternalLinks;
             fi.FindThirdPartyResourceURI("https://vuc.susu.ru/");
         }
     }

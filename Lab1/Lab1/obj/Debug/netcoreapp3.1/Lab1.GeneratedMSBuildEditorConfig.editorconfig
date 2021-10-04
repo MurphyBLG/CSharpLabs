@@ -1,7 +1,3 @@
 is_global = true
 build_property.RootNamespace = Lab1
-<<<<<<< HEAD
-build_property.ProjectDir = C:\Users\Murphy\Documents\C-Labs\Lab1\Lab1\
-=======
 build_property.ProjectDir = C:\Users\Murphy\Documents\C# labs\Lab1\Lab1\
->>>>>>> dfd6e01b1efecac4c58f6be66ebd97c5192df7d2
