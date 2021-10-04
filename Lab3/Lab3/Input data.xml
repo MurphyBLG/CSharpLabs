@@ -1,47 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <buildings>
 	<ResidentialBuilding>
+		<Adress>A</Adress>
 		<CountOfRooms>3</CountOfRooms>
 		<CountOfApartments>8</CountOfApartments>
 	</ResidentialBuilding>
 
 	<ResidentialBuilding>
+		<Adress>B</Adress>
 		<CountOfRooms>9</CountOfRooms>
 		<CountOfApartments>14</CountOfApartments>
 	</ResidentialBuilding>
 
 	<ResidentialBuilding>
+		<Adress>C</Adress>
 		<CountOfRooms>13</CountOfRooms>
 		<CountOfApartments>5</CountOfApartments>
 	</ResidentialBuilding>
 
 	<ResidentialBuilding>
+		<Adress>D</Adress>
 		<CountOfRooms>2</CountOfRooms>
 		<CountOfApartments>16 </CountOfApartments>
 	</ResidentialBuilding>
 
 	<ResidentialBuilding>
+		<Adress>E</Adress>
 		<CountOfRooms>16</CountOfRooms>
 		<CountOfApartments>15</CountOfApartments>
 	</ResidentialBuilding>
 
 	<NonResidentialBuilding>
+		<Adress>F</Adress>
 		<Square>97,2</Square>
 	</NonResidentialBuilding>
 
 	<NonResidentialBuilding>
+		<Adress>G</Adress>
 		<Square>29,6</Square>
 	</NonResidentialBuilding>
 
 	<NonResidentialBuilding>
+		<Adress>H</Adress>
 		<Square>4,0</Square>
 	</NonResidentialBuilding>
 
 	<NonResidentialBuilding>
+		<Adress>I</Adress>
 		<Square>26,82</Square>
 	</NonResidentialBuilding>
 
 	<NonResidentialBuilding>
+		<Adress>J</Adress>
 		<Square>12,86</Square>
 	</NonResidentialBuilding>
 </buildings>
