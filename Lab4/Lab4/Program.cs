@@ -12,11 +12,12 @@ namespace Lab4
     {
         private readonly WebClient client = new WebClient();
         private readonly string HRefPattern = @"href\s*=\s*(?:[""'](?<1>[^""']*)[""']|(?<1>\S+))";
-        private Dictionary<string, bool> usedExternal = new Dictionary<string, bool>();
+        private Dictionary<Uri, bool> usedExternal = new Dictionary<Uri, bool>();
         private Dictionary<string, bool> usedLocal = new Dictionary<string, bool>();
-        private HashSet<string> _ignoreFiles = new HashSet<string> { ".ico", ".xml", ".png", ".css", ".jpg", ".zip", ".ppt", ".docx", ".doc", ".pdf" };
+        private HashSet<string> _ignoreFiles = new HashSet<string> { ".ico", ".xml", ".png", ".css", ".jpg",
+                                                                     ".zip", ".ppt", ".docx", ".doc", ".pdf" };
 
-        public delegate void TargetFoundEventHandler(List<string> links);
+        public delegate void TargetFoundEventHandler(string mainPageHTML, Uri link, string linkFatehr);
         public event TargetFoundEventHandler TargetFound;
 
         public void FindThirdPartyResourceURI(string URI)
@@ -47,9 +48,11 @@ namespace Lab4
 
             var externalRefs = (from href in hrefs
                                 where !href.Islocal
-                                select href.Ref).ToList();
+                                select new Uri(href.Ref)).ToList();
 
-            if (externalRefs.Count > 0) OnTargetFound(externalRefs);
+            if (externalRefs.Count > 0)
+                foreach (var target in externalRefs)
+                    OnTargetFound(mainPage, target, URI);
 
             var localRefs = (from href in hrefs
                              where href.Islocal
@@ -66,25 +69,33 @@ namespace Lab4
             }
         }
 
-        protected virtual void OnTargetFound(List<string> links)
+        protected virtual void OnTargetFound(string mainPage, Uri link, string linkFather)
         {
             if (TargetFound != null)
-                TargetFound(links);
+                TargetFound(mainPage, link, linkFather);
         }
 
-        public void PrintExternalLinks(List<string> links)
+        public void PrintExternalLink(string mainPageHTML, Uri link, string linkFather)
         {
-            foreach (var link in links)
-            {
-                string fileEx = Path.GetExtension((new Uri(link)).LocalPath).ToLower();
-                if (!usedExternal.ContainsKey(link))
-                    usedExternal.Add(link, false);
+            string fileEx = Path.GetExtension(link.LocalPath).ToLower();
+            if (!usedExternal.ContainsKey(link))
+                usedExternal.Add(link, false);
 
-                if (!usedExternal[link] && !_ignoreFiles.Contains(fileEx))
+            if (!usedExternal[link] && !_ignoreFiles.Contains(fileEx))
+            {
+                string patern = "<a href=\"" + link.ToString() + "\">[^\\<]*</a>";
+                var linkTitle = Regex.Match(mainPageHTML, patern).Value
+                                .Replace("<a href=\"" + link.ToString() + "\">", "").Replace("</a>", "");
+
+                if (linkTitle != "")
                 {
-                    Console.WriteLine(link);
-                    usedExternal[link] = true;
+                    Console.WriteLine("Title of the link on the main page: {0}", linkTitle);
+                    Console.WriteLine("Page father URI: {0}", linkFather);
+                    Console.WriteLine("Nesting level: {0}", 123);
+                    Console.WriteLine("Target: {0}\n", link);
                 }
+
+                usedExternal[link] = true;
             }
         }
     }
@@ -93,9 +104,10 @@ namespace Lab4
     {
         static void Main(string[] args)
         {
+            System.Console.OutputEncoding = System.Text.Encoding.UTF8;
             HTMLAnalizer fi = new HTMLAnalizer();
 
-            fi.TargetFound += fi.PrintExternalLinks;
+            fi.TargetFound += fi.PrintExternalLink;
             fi.FindThirdPartyResourceURI("https://vuc.susu.ru/");
         }
     }
