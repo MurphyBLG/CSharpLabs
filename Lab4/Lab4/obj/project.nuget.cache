@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "/sm1xVXGnggjQ0ngPxty92uWOfNNARn7m6gKtOKzUfL6NeSPBQDdkMj1imM64yCgPTbhmxeNKGRlEzrCu9cG4A==",
+  "dgSpecHash": "Xu1FttEJOlezZ2LwtY/IckSi2H0o6FpEVbx62liHOzOSvBtSK3nXVmEHAYWWM+VXXFXnuNWDgVy2o0v3eNUBRQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\4795\\Documents\\Prog\\CSharpLabs\\Lab4\\Lab4\\Lab4.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\4795\\.nuget\\packages\\csvhelper\\27.1.1\\csvhelper.27.1.1.nupkg.sha512",
+    "C:\\Users\\4795\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512"
+  ],
   "logs": []
 }

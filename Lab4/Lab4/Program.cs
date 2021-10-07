@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Globalization;
 
 namespace Lab4
 {
@@ -62,10 +64,7 @@ namespace Lab4
             {
                 string fileEx = Path.GetExtension((new Uri(link)).LocalPath).ToLower();
                 if ((!usedLocal.ContainsKey(link) || !usedLocal[link]) && !_ignoreFiles.Contains(fileEx))
-                {
-                    //Console.WriteLine(link);
                     FindThirdPartyResourceURI(link);
-                }
             }
         }
 
@@ -89,14 +88,51 @@ namespace Lab4
 
                 if (linkTitle != "")
                 {
-                    Console.WriteLine("Title of the link on the main page: {0}", linkTitle);
-                    Console.WriteLine("Page father URI: {0}", linkFather);
-                    Console.WriteLine("Nesting level: {0}", 123);
-                    Console.WriteLine("Target: {0}\n", link);
+                    WriteInfoToConsole(linkTitle, linkFather, GetNestingLevel(linkFather), link);
+                    WriteInfoToCSV(linkTitle, linkFather, GetNestingLevel(linkFather), link);
                 }
 
                 usedExternal[link] = true;
             }
+        }
+
+        private void WriteInfoToConsole(string linkTitle, string linkFather, int nestingLevel, Uri link)
+        {
+            Console.WriteLine("Title of the link on the main page: {0}", linkTitle);
+            Console.WriteLine("Page father URI: {0}", linkFather);
+            Console.WriteLine("Nesting level: {0}", nestingLevel);
+            Console.WriteLine("Target: {0}\n", link);
+        }
+
+        private string GetNormalizedURI(string URI)
+        {
+            if (URI[URI.Length - 1] != '/')
+                URI += '/';
+
+            return URI;
+        }
+
+        private int GetNestingLevel(string URI)
+        {
+            string link = GetNormalizedURI(URI);
+
+            int nestingLevel = -3;
+            foreach(char c in link)
+            {
+                if (c == '/')
+                    nestingLevel++;
+            }
+
+            return nestingLevel;
+        }
+
+        public void WriteInfoToCSV(string linkTitle, string linkFather, int nestingLevel, Uri link)
+        {
+            if (new FileInfo(@"C:\Users\4795\Documents\Prog\CSharpLabs\Lab4\Lab4\info.csv").Length < 6)
+                File.AppendAllText(@"C:\Users\4795\Documents\Prog\CSharpLabs\Lab4\Lab4\info.csv", "Title of the link on the main page" + ',' + "Page father URI" + ',' + "Nesting level" + ',' + "Target" + '\n');
+
+            string data = linkTitle + ',' + linkFather + ',' + nestingLevel + ',' + link + '\n';
+            File.AppendAllText(@"C:\Users\4795\Documents\Prog\CSharpLabs\Lab4\Lab4\info.csv", data);
         }
     }
 
